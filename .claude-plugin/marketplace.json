@@ -1,0 +1,14 @@
+{
+  "name": "green-harness",
+  "description": "The harness client plugin for Claude Code.",
+  "owner": {
+    "name": "greenflac"
+  },
+  "plugins": [
+    {
+      "name": "green-harness",
+      "source": "./green-harness",
+      "description": "The harness client: the MCP connection to your harness server and the hooks that forward each tool call to it once you attach a session."
+    }
+  ]
+}

@@ -1,0 +1,24 @@
+{
+  "name": "green-harness",
+  "version": "0.1.0",
+  "description": "Connects Claude Code to a harness server: MCP tools, and hooks that forward tool calls to the server only in a session you attach with /green-harness:start.",
+  "author": {
+    "name": "greenflac"
+  },
+  "homepage": "https://github.com/greenflac/green-harness-plugin",
+  "userConfig": {
+    "server_url": {
+      "type": "string",
+      "title": "Harness server URL",
+      "description": "The server's base URL, for example https://harness.example.com (no path).",
+      "required": true
+    },
+    "key": {
+      "type": "string",
+      "title": "Harness key",
+      "description": "Your tenant key from the server owner. Sent only as an Authorization header to the MCP endpoint.",
+      "required": true,
+      "sensitive": true
+    }
+  }
+}
