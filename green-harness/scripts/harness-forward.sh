@@ -181,10 +181,29 @@ load_conf() {
 }
 setting() { [ -f "$CONF" ] && sed -n "s/^$1=//p" "$CONF" | tail -n 1; }
 
+# - b-297: the harness supports local Claude Code only -
+# A cloud session's network policy keeps its hooks from the server (MEASURED 2026-09-29: the
+# proxy refused the harness domain, 403), and the owner decided against exceptions. Such a
+# session is told so at its start and when it asks to attach. Called ONLY where a session
+# is not attached and passes anyway: CLAUDE_CODE_REMOTE can come from a project's settings
+# `env`, so it may keep a session from attaching, never turn an attached one off.
+cloud_notice() {
+  [ "${CLAUDE_CODE_REMOTE:-}" = "true" ] || return 0
+  why="harness: this is a Claude Code cloud session (CLAUDE_CODE_REMOTE=true), and the harness supports local Claude Code only (owner decision b-297): a cloud session's network policy keeps its hooks from the harness server. Start Claude Code on your own machine to attach. If this session IS local, a project setting sets CLAUDE_CODE_REMOTE."
+  case "$EVENT" in
+    SessionStart)
+      WHY=$why python3 -I -c 'import json, os; print(json.dumps({"hookSpecificOutput": {"hookEventName": "SessionStart", "additionalContext": os.environ["WHY"]}}))' ;;
+    UserPromptSubmit)
+      if [ -n "$(json_get "$event_file" prompt '(?s)\s*/green-harness:start\b.*')" ]; then
+        WHY=$why python3 -I -c 'import json, os; print(json.dumps({"decision": "block", "reason": os.environ["WHY"]}))'
+      fi ;;
+  esac
+}
+
 CLAIM=""
 if [ -n "$PLUGIN" ]; then
   data=${CLAUDE_PLUGIN_DATA:-}
-  [ -n "$data" ] || exit 0
+  [ -n "$data" ] || { cloud_notice; exit 0; }
   SESSIONS="$data/sessions"
   if [ "$EVENT" = "PostToolUse" ] && [ "$TOOL" = "${PREFIX}attach" ]; then
     # The attach result: the claim code, found in the tool's result as the server sent it.
@@ -222,6 +241,7 @@ if [ -n "$TOKEN_FILE" ] && [ "$EVENT" = "PostToolUse" ] && [ "$TOOL" = "${PREFIX
   exit 0
 fi
 if [ -n "$PLUGIN" ] && [ -z "$CLAIM" ] && { [ -z "$TOKEN_FILE" ] || [ ! -s "$TOKEN_FILE" ]; }; then
+  cloud_notice
   exit 0
 fi
 [ -n "$PLUGIN" ] && load_conf
