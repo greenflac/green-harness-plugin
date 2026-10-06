@@ -3,8 +3,9 @@ description: Attach the harness to this session only
 ---
 Attach the harness to this session.
 
-If the session context says the harness supports local Claude Code only (a cloud session,
-b-297), tell the user that, and stop: do not call any harness tool.
+If the session context says this is a cloud session (b-318), do not call `attach`: tell the
+user that attaching does not work there, and point to the repo capture in the plugin
+README, section Cloud.
 
 1. Call the harness MCP tool `attach` (no arguments). Its result carries a single-use claim
    code (valid for a minute). The plugin's hook exchanges it with the server

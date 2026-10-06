@@ -181,15 +181,15 @@ load_conf() {
 }
 setting() { [ -f "$CONF" ] && sed -n "s/^$1=//p" "$CONF" | tail -n 1; }
 
-# - b-297: the harness supports local Claude Code only -
+# - b-318: a cloud session uses the repo capture, not the forwarder -
 # A cloud session's network policy keeps its hooks from the server (MEASURED 2026-09-29: the
 # proxy refused the harness domain, 403), and the owner decided against exceptions. Such a
-# session is told so at its start and when it asks to attach. Called ONLY where a session
-# is not attached and passes anyway: CLAUDE_CODE_REMOTE can come from a project's settings
-# `env`, so it may keep a session from attaching, never turn an attached one off.
+# session is pointed at the repo capture at its start and when it asks to attach. Called ONLY
+# where a session is not attached and passes anyway: CLAUDE_CODE_REMOTE can come from a
+# project's settings `env`, so it may keep a session from attaching, never turn one off.
 cloud_notice() {
   [ "${CLAUDE_CODE_REMOTE:-}" = "true" ] || return 0
-  why="harness: this is a Claude Code cloud session (CLAUDE_CODE_REMOTE=true), and the harness supports local Claude Code only (owner decision b-297): a cloud session's network policy keeps its hooks from the harness server. Start Claude Code on your own machine to attach. If this session IS local, a project setting sets CLAUDE_CODE_REMOTE."
+  why="harness: this is a Claude Code cloud session (CLAUDE_CODE_REMOTE=true): its network policy keeps hooks from the harness server, so /green-harness:start cannot attach here (b-318). Use the repo capture instead: install it with green-harness/capture/install.py from the public repo greenflac/green-harness-plugin (it adds hooks to .claude/settings.json and a journal under .green-harness/), commit, then ask the harness connector to verify that commit. See its README, section Cloud. If this session IS local, a project setting sets CLAUDE_CODE_REMOTE."
   case "$EVENT" in
     SessionStart)
       WHY=$why python3 -I -c 'import json, os; print(json.dumps({"hookSpecificOutput": {"hookEventName": "SessionStart", "additionalContext": os.environ["WHY"]}}))' ;;
