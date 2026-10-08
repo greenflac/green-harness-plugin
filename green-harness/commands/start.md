@@ -4,8 +4,9 @@ description: Attach the harness to this session only
 Attach the harness to this session.
 
 If the session context says this is a cloud session (b-318), do not call `attach`: tell the
-user that attaching does not work there, and point to the repo capture in the plugin
-README, section Cloud.
+user that attaching does not work there, and point to the claude.ai connector
+(https://harness.greenflac.online/mcp, signed in with their harness key; the plugin README,
+section Cloud). Install nothing into the user's repository (b-360).
 
 1. Call the harness MCP tool `attach` (no arguments). Its result carries a single-use claim
    code (valid for a minute). The plugin's hook exchanges it with the server

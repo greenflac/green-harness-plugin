@@ -8,6 +8,8 @@ claude plugin marketplace add greenflac/green-harness-plugin
 claude plugin install green-harness@green-harness --scope user
 ```
 
-In a Claude Code cloud session the plugin cannot reach the server; use the repo capture in
-`green-harness/capture/` instead. See [green-harness/README.md](green-harness/README.md),
-section Cloud.
+In a Claude Code cloud session the plugin cannot reach the server. There, add the claude.ai
+connector instead: `https://harness.greenflac.online/mcp`, signed in over OAuth with your
+harness key. Then write your task in any session; the model asks your consent and starts the
+brief. Nothing is installed into your repository. See
+[green-harness/README.md](green-harness/README.md), section Cloud.
