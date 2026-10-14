@@ -76,13 +76,14 @@ The model follows the server's instructions for this (UNVERIFIED that it always 
 real session it ignored them once and followed them once). If it does not ask, ask it in
 your own words to start the green-harness brief for your task.
 
-**Your answers.** The rule (b-362), as the server applies it: each brief question is
+**Your answers.** The rule (b-363), as the server applies it: each brief question is
 asked in the client's question form (`ask_owner`), and what you choose there is your answer.
 When the client cannot show the form, the model asks you in chat with the same options, and
-the answer it relays counts for a brief question, marked "relayed by the model"; you can
-replace it later through the form. Moving the project to the next stage needs your "yes" in
-that form: without the form the stage does not move. Whether the claude.ai client can show
-the form is UNVERIFIED.
+the answer it relays counts as your answer, marked "relayed by the model" in the brief,
+the status and the reports; you can replace it later through the form. Moving the project
+to the next stage asks for your "yes" in that form. When the client cannot show the form,
+the model asks you in chat and relays your "yes"; the stage moves, marked "relayed by the
+model". Whether the claude.ai client can show the form is UNVERIFIED.
 
 The capture hook that this repository offered for the cloud before 2026-10-08 is withdrawn
 (b-360): its journal had to be committed after every action. If a repository of yours
