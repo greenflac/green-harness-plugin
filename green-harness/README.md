@@ -67,14 +67,32 @@ claude.ai, not through your session's network. Nothing is installed into your re
    `https://harness.greenflac.online/mcp` and sign in over OAuth with your harness key.
    (MEASURED 2026-10-06: the connector signs in over OAuth on the production server, and its
    tools appear in Claude Code cloud sessions as `mcp__green-harness__*`.)
-2. **Write your task.** In any new session of any repository, make your message the task,
-   exactly as you want it recorded.
-3. **Consent.** The model asks your consent before it connects the harness. Only after you
-   agree does it start the brief, from your task as you wrote it.
+2. **Turn the harness on.** In any session of any repository, type `/green_harness_on`
+   with your task after it, exactly as you want it recorded. The brief starts from that
+   task. Without a task, the model asks you for it in one line. A harness key holds one
+   project: if yours already has one, the model tells you its task, says the new one is
+   not recorded, and continues the old project only if you say so.
+3. **Turn it off.** `/green_harness_off` stops the harness: the model stops calling its
+   tools and works as usual. The harness also lapses after 8 hours without a harness call.
 
-The model follows the server's instructions for this (UNVERIFIED that it always does: in a
-real session it ignored them once and followed them once). If it does not ask, ask it in
-your own words to start the green-harness brief for your task.
+Claude Code in the cloud sends no session id, so there the switch covers every
+conversation of your key at once: an ON in one turns it on in all of them, and an OFF in
+any turns it off. The command's reply says which scope it has.
+
+The two commands are the connector's prompts. Claude Code names an MCP prompt
+`/mcp__<connector>__<prompt>`, so with the connector named `green-harness` you type
+`/mcp__green-harness__green_harness_on <your task>` and
+`/mcp__green-harness__green_harness_off`; the slash menu lists them as
+`/green-harness:green_harness_on (MCP)` and `/green-harness:green_harness_off (MCP)`, and
+typing `/green_harness_on` there finds the first. UNVERIFIED until seen in a live session:
+the names the menu shows, and whether a task with spaces reaches the server whole (if it is
+cut, the model asks you for the task).
+
+The command is yours: the model cannot send it. (MEASURED 2026-10-16: models in real
+sessions ignored the server's instructions and never started the brief on their own.)
+While the harness is off in a session, its changing tools answer "harness is off for this
+session" and change nothing; `status` and `brief` still read. A local session with the
+plugin's hooks needs no command.
 
 **Your answers.** The rule (b-363), as the server applies it: each brief question is
 asked in the client's question form (`ask_owner`), and what you choose there is your answer.
@@ -83,7 +101,10 @@ the answer it relays counts as your answer, marked "relayed by the model" in the
 the status and the reports; you can replace it later through the form. Moving the project
 to the next stage asks for your "yes" in that form. When the client cannot show the form,
 the model asks you in chat and relays your "yes"; the stage moves, marked "relayed by the
-model". Whether the claude.ai client can show the form is UNVERIFIED.
+model". MEASURED 2026-10-16: Claude Code cloud sessions declare the form but do not show
+it. The server waits at most 40 s for a form; a form the client cancelled at its own 60 s
+timeout, or never answered, counts as one it could not show, so the model then asks you in
+chat. A Cancel you press yourself stays a Cancel: the question stays open.
 
 The capture hook that this repository offered for the cloud before 2026-10-08 is withdrawn
 (b-360): its journal had to be committed after every action. If a repository of yours

@@ -10,6 +10,6 @@ claude plugin install green-harness@green-harness --scope user
 
 In a Claude Code cloud session the plugin cannot reach the server. There, add the claude.ai
 connector instead: `https://harness.greenflac.online/mcp`, signed in over OAuth with your
-harness key. Then write your task in any session; the model asks your consent and starts the
-brief. Nothing is installed into your repository. See
+harness key. Then type `/green_harness_on` with your task in any session to turn the harness
+on, and `/green_harness_off` to turn it off. Nothing is installed into your repository. See
 [green-harness/README.md](green-harness/README.md), section Cloud.

@@ -190,7 +190,7 @@ setting() { [ -f "$CONF" ] && sed -n "s/^$1=//p" "$CONF" | tail -n 1; }
 # project's settings `env`, so it may keep a session from attaching, never turn one off.
 cloud_notice() {
   [ "${CLAUDE_CODE_REMOTE:-}" = "true" ] || return 0
-  why="harness: this is a Claude Code cloud session (CLAUDE_CODE_REMOTE=true): its network policy keeps hooks from the harness server, so /green-harness:start cannot attach here (b-318). Use the claude.ai connector instead (b-360): add https://harness.greenflac.online/mcp as a connector in claude.ai and sign in with your harness key; then write your task in any session, and the model asks your consent and starts the brief. Nothing is installed into your repository. If this session IS local, a project setting sets CLAUDE_CODE_REMOTE."
+  why="harness: this is a Claude Code cloud session (CLAUDE_CODE_REMOTE=true): its network policy keeps hooks from the harness server, so /green-harness:start cannot attach here (b-318). Use the claude.ai connector instead (b-360): add https://harness.greenflac.online/mcp as a connector in claude.ai and sign in with your harness key; then type /green_harness_on with your task in any session to turn the harness on (/green_harness_off turns it off). Nothing is installed into your repository. If this session IS local, a project setting sets CLAUDE_CODE_REMOTE."
   case "$EVENT" in
     SessionStart)
       WHY=$why python3 -I -c 'import json, os; print(json.dumps({"hookSpecificOutput": {"hookEventName": "SessionStart", "additionalContext": os.environ["WHY"]}}))' ;;
